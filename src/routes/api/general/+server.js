@@ -1,9 +1,9 @@
-import { API_GENERAL, INTERNAL_API_KEY } from '$env/static/private';
+import { API_GENERAL, VITE_INTERNAL_API_KEY } from '$env/static/private';
 
 export async function GET({request}) {
     const clientKey = request.headers.get('x-api-key');
 
-    if (clientKey !== INTERNAL_API_KEY) {
+    if (clientKey !== VITE_INTERNAL_API_KEY) {
       return new Response('Unauthorized', { status: 401 });
     }
 
