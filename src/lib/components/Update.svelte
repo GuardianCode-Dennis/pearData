@@ -13,7 +13,7 @@
     function updateTime() {
         setInterval(() => {
             timeLeft--;
-            if (timeLeft < 0) {
+            if (timeLeft < 1) {
                 timeLeft = 300;
             }
             formattedTime = formatTime(timeLeft);

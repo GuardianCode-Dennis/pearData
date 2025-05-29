@@ -5,16 +5,22 @@
     import Button from "$lib/components/Button.svelte";
     import PopupToken from "$lib/components/popups/PopupToken.svelte";
 
+    // Functions
+    import { dateFormat } from "$lib/utils/dateFormat.js";
+
     // Stores
     import { showTokenPopup } from "$lib/stores/tokenPopup.js";
     import { cookieData } from "$lib/stores/cookieData.js";
+    import { generalData } from "$lib/stores/generalData";
 
     // Props
-    export let dailyFee = 0;
+    $: dailyFee = $generalData.dailyFees || 0;
 
+    // Variables
+    const todayDate = dateFormat(new Date().toISOString().slice(0, 10));
     let stPear = $cookieData.stPear || 0;
     let stakedPrice = $cookieData.stakedPrice || 0;
-    let totalPearStaked = 109583883; // Example value, replace with actual data if available
+    let totalPearStaked = $generalData.totalPearStaked; // Example value, replace with actual data if available
     let yourStakingPercentage = (stPear / totalPearStaked) * 100 || 0;
 
     let stakersPercentage = 80;
@@ -27,7 +33,7 @@
     $: {
         stPear = $cookieData.stPear || 0;
         stakedPrice = $cookieData.stakedPrice || 0;
-        totalPearStaked = 109583883; // Example value, replace with actual data if available
+        totalPearStaked = $generalData.totalPearStaked; // Example value, replace with actual data if available
         yourStakingPercentage = (stPear / totalPearStaked) * 100 || 0;
 
         stakersPercentage = 80;
@@ -49,7 +55,7 @@
 <Card customClass="flex flex-col justify-between relative z-[1]">
     <div class="flex justify-between items-start">
         <div class="flex flex-col">
-            <span class="text-sm flex">Current estimated fees (May 25, 2025)</span>
+            <span class="text-sm flex">Current estimated fees ({todayDate})</span>
             <div class="flex flex-col relative">
                 <Number number={dailyFee} type="dollar" size="big" />
                 <span class="text-[10px] italic mt-1">Fees are estimated based on a 0.06% trading fee — actual fees may vary.</span>

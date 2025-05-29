@@ -9,9 +9,16 @@
     import Fee from "$lib/components/cards/Fee.svelte";
     import {LinkedChart, LinkedLabel, LinkedValue} from "svelte-tiny-linked-charts";
     import chroma from 'chroma-js';
+    import { onMount } from 'svelte';
+    import { setupGeneralDataRefresh } from '$lib/utils/refreshGeneralData.js';
+    import { saveGeneralDataStore } from '$lib/utils/saveGeneralDataStore.js';
+
+    // Functions
+    import { dateFormat } from "$lib/utils/dateFormat.js";
 
     // Stores
     import { cookieData } from "$lib/stores/cookieData.js";
+    import { generalData } from "$lib/stores/generalData.js";
 
     // Icons
     import Calendar from "$lib/components/icons/Calendar.svelte";
@@ -22,17 +29,39 @@
 
     // Data
     export let data;
+    
+    // Update stores
     cookieData.set({
         stPear: data.stPear || 0,
         stakedPrice: data.stakedPrice || 0,
     });
+    
+    generalData.set({
+        dailyVolume: data.generalData.dailyVolume || 0,
+        dailyUsers: data.generalData.dailyUsers || 0,
+        dailyFees: data.generalData.dailyFees || 0,
+        totalVolume: data.generalData.totalVolume || 0,
+        weeklyVolume: data.generalData.weeklyVolume || 0,
+        monthlyVolume: data.generalData.monthlyVolume || 0,
+        dailyATH: {
+            date: data.generalData.dailyATH?.date || new Date().toISOString().slice(0, 10),
+            volume: data.generalData.dailyATH?.volume || 0
+        },
+        partyMode: data.generalData.partyMode || false,
+        totalPearStaked: data.generalData.totalPearStaked || 0,
+    });
+
+    setupGeneralDataRefresh((updatedData) => {
+        saveGeneralDataStore(generalData, updatedData);
+    }, import.meta.env.VITE_INTERNAL_API_KEY);
+    // End of updating stores
 
     // Variables
-    const totalVolume = 1240530378.42;
-    let dailyVolume = 13457530.20;
+    $: totalVolume = $generalData.totalVolume || 0;
+    $: dailyVolume = $generalData.dailyVolume || 0;
+    $: dailtATHDate = dateFormat($generalData.dailyATH.date);
 
     // Reactive variables
-    $: dailyFee = dailyVolume * 0.0006; // 0.06% fee
     $: newDailyVolume = dailyVolume;
     $: newTotalVolume = totalVolume;
 
@@ -245,14 +274,14 @@
                 <div class="flex items-start gap-3 [&_path]:fill-primary">
                     <Calendar />
                     <div class="flex flex-col">
-                        <span class="text-[12px] text-secondary">Daily All time high - <strong>May 23, 2025</strong></span>
-                        <Number number={25675343.42} type="dollar" size="small" />
+                        <span class="text-[12px] text-secondary">Daily All time high {#if dailtATHDate}- <strong>{dailtATHDate}</strong>{/if}</span>
+                        <Number number={$generalData.dailyATH.volume} type="dollar" size="small" />
                     </div>
                 </div>
             </div>
         </Card>
 
-        <Fee {dailyFee} />
+        <Fee />
     </div>
 
     <div class="grid grid-cols-1 xl:grid-cols-[400px_1fr] 2xl:grid-cols-[490px_1fr] gap-6 md:gap-8 2xl:gap-[50px] mt-16 2xl:mt-18 relative">
@@ -268,13 +297,13 @@
             <Card customClass="h-full min-h-[150px] md:min-h-[200px] 2xl:min-h-[295px] justify-center text-center items-center">
                 <span class="text-sm daily-volume-current-text flex">Weekly volume</span>
                 <div class="flex flex-col relative">
-                    <Number number={10302302.20} type="dollar" size="normal" />
+                    <Number number={$generalData.weeklyVolume} type="dollar" size="normal" />
                 </div>
             </Card>
             <Card customClass="h-full min-h-[150px] md:min-h-[200px] 2xl:min-h-[295px] justify-center text-center items-center">
                 <span class="text-sm daily-volume-current-text flex">Monthly volume</span>
                 <div class="flex flex-col relative">
-                    <Number number={120302302.23} type="dollar" size="normal" />
+                    <Number number={$generalData.monthlyVolume} type="dollar" size="normal" />
                 </div>
             </Card>
         </div>

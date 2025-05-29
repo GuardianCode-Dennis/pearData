@@ -5,14 +5,14 @@
 
 	// Blobs
 	import BlobOne from '$lib/components/blobs/BlobOne.svelte';
-	import { partyMode } from '$lib/stores/partyMode';
-	
+	import { generalData } from '$lib/stores/generalData';
+
 	let { children } = $props();
 </script>
 
 <BlobOne />
 
-{#if $partyMode}
+{#if $generalData.partyMode}
 	<Party />
 {/if}
 
