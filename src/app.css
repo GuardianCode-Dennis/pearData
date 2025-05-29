@@ -1,0 +1,86 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@theme {
+    /* Add tailwind containers */
+    --breakpoint-sm: 100%;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1200px;
+    --breakpoint-2xl: 1460px;
+    --breakpoint-3xl: 1800px;
+
+    /* Add tailwind colors */
+    --color-primary: #009367;
+    --color-cards: #003022;
+    --color-background: #00402D;
+    --color-gradient-start: #009367;
+    --color-gradient-end: #029C2D;
+    --color-extra: #00E49D;
+    --color-hr: #026245;
+
+    /* Add fonts */
+    --font-base: 'Inter', sans-serif;
+
+    /* Add text sizes */
+    --text-number: 2.5rem;
+    --text-number-medium: 1.8rem;
+    --text-number-big: 3.25rem;
+    --text-number-small: 1.375rem;
+    --text-number-extrasmall: 1.2rem;
+
+    /* Radius */
+    --radius-cards: 1.25rem;
+}
+
+html {
+    @apply text-[16px] leading-normal antialiased;
+
+    * {
+        @apply antialiased;
+    }
+}
+
+body {
+    @apply bg-background text-white font-base;
+
+    * {
+        &::selection {
+            @apply bg-primary/60;
+        }
+    }
+}
+
+.linechart {
+    svg {
+        &:focus {
+            outline: none;
+        }
+    }
+
+    circle {
+        r: 1.1px;
+    }
+
+    rect {
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+hr {
+    @apply w-full border-hr;
+}
+
+.number {
+    @apply text-number-medium 2xl:text-number;
+}
+
+.number-big {
+    @apply text-number-medium md:text-number 2xl:text-number-big;
+}
+
+.number-small {
+    @apply text-number-extrasmall 2xl:text-number-small;
+}
