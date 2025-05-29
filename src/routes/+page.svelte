@@ -35,7 +35,7 @@
         stPear: data.stPear || 0,
         stakedPrice: data.stakedPrice || 0,
     });
-    
+
     generalData.set({
         dailyVolume: data.generalData.dailyVolume || 0,
         dailyUsers: data.generalData.dailyUsers || 0,
@@ -57,9 +57,15 @@
     // End of updating stores
 
     // Variables
+    const pageTitle = "Pear Protocol Analytics";
+    const siteName = "PearData";
     $: totalVolume = $generalData.totalVolume || 0;
     $: dailyVolume = $generalData.dailyVolume || 0;
     $: dailtATHDate = dateFormat($generalData.dailyATH.date);
+    $: titleVolume = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format(dailyVolume)
 
     // Reactive variables
     $: newDailyVolume = dailyVolume;
@@ -207,10 +213,14 @@
     const fillArray = chroma.scale([startColor, endColor]).mode('lab').colors(Object.keys(dataTotalVolume).length);
 </script>
 
+<svelte:head>
+	<title>{titleVolume} - {pageTitle} | {siteName}</title>
+</svelte:head>
+
 <div class="flex flex-col pr-6 lg:pr-12 xl:pr-20 pb-25 lg:pb-20 py-10 lg:py-17">
     <div class="flex flex-row md:pt-2 lg:pt-0 -mt-3 lg:-mt-0 items-center flex-wrap justify-between gap-6 md:gap-8">
         <div>
-            <PageHeader title="Pear Protocol Analytics" />
+            <PageHeader title={pageTitle} />
         </div>
         <div class="text-left -mb-1 bg-linear-90 rounded-xl hidden lg:flex gap-8 items-center w-full md:w-auto">
             <span class="text lg:whitespace-nowrap">Start trading on Pear and earn rewards</span>
