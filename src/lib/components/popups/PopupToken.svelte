@@ -66,7 +66,7 @@
     };
 </script>
 
-<div class="fixed inset-0 w-screen h-screen flex justify-center items-center z-[200] bg-primary/20 backdrop-blur-lg p-6 shadow-2xl {$showTokenPopup ? '' : 'opacity-0 invisible'} transition-all">
+<div class="fixed inset-0 w-dvh h-dvh flex justify-center items-center z-[200] bg-primary/20 backdrop-blur-lg p-6 shadow-2xl {$showTokenPopup ? '' : 'opacity-0 invisible'} transition-all">
     <div class="bg-cards w-full max-w-[500px] p-6 md:p-10 2xl:p-12 max-h-[100%] rounded-cards overflow-auto relative">
         <button aria-label="close" class="absolute right-0 top-0 p-3 md:p-6 cursor-pointer" on:click={closePopup}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
