@@ -10,7 +10,7 @@
     import {LinkedChart, LinkedLabel, LinkedValue} from "svelte-tiny-linked-charts";
     import chroma from 'chroma-js';
     import { onMount } from 'svelte';
-    import { setupGeneralDataRefresh } from '$lib/utils/refreshGeneralData.js';
+    import { setupDataRefresh } from '$lib/utils/refreshData.js';
     import { saveGeneralDataStore } from '$lib/utils/saveGeneralDataStore.js';
 
     // Functions
@@ -51,14 +51,16 @@
         totalPearStaked: data.generalData.totalPearStaked || 0,
     });
 
-    setupGeneralDataRefresh((updatedData) => {
+    setupDataRefresh((updatedData) => {
         saveGeneralDataStore(generalData, updatedData);
-    }, import.meta.env.VITE_INTERNAL_API_KEY);
+    }, '/api/general', import.meta.env.VITE_INTERNAL_API_KEY);
     // End of updating stores
 
-    // Variables
+    // Standard Variables
     const pageTitle = "Pear Protocol Analytics";
     const siteName = "PearData";
+
+    // Reactive variables
     $: totalVolume = $generalData.totalVolume || 0;
     $: dailyVolume = $generalData.dailyVolume || 0;
     $: dailtATHDate = dateFormat($generalData.dailyATH.date);
@@ -66,151 +68,40 @@
         style: 'currency',
         currency: 'USD',
     }).format(dailyVolume)
-
-    // Reactive variables
     $: newDailyVolume = dailyVolume;
     $: newTotalVolume = totalVolume;
 
-    $: dataDailyVolume = {
-        "May 1, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 2, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 3, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 4, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 5, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 6, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 7, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 8, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 9, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 10, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 11, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 12, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 13, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 14, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 15, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 16, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 17, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 18, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 19, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 20, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 21, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 22, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 23, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 24, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 25, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 26, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 27, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 28, 2025": Math.random() * (10000000 - 3000000) + 3000000,
-        "May 29, 2025": Math.random() * (10000000 - 1000000) + 1000000,
-        "May 30, 2025": dailyVolume,
-    }
+    // Daily volume chart
+    let dailyVolumeChart = {};
+    data.combinedData.slice(-30).forEach((item) => {
+        dailyVolumeChart[dateFormat(item.date)] = item.dailyVolume;
+    });
 
-    let dataTotalVolume = {
-        "1": 1000000,
-        "2": 1500000,
-        "3": 2000000,
-        "4": 2500000,
-        "5": 3000000,
-        "6": 3500000,
-        "7": 4000000,
-        "8": 4500000,
-        "9": 5000000,
-        "10": 5500000,
-        "11": 6000000,
-        "12": 6500000,
-        "13": 7000000,
-        "14": 7500000,
-        "15": 8000000,
-        "16": 8500000,
-        "17": 9000000,
-        "18": 9500000,
-        "19": 10000000,
-        "20": 10500000,
-        "21": 11000000,
-        "22": 11500000,
-        "23": 12000000,
-        "24": 12500000,
-        "25": 13000000,
-        "26": 13500000,
-        "27": 14000000,
-        "28": 14500000,
-        "29": 15000000,
-        "30": 15500000,
-        "31": 16000000,
-        "32": 16500000,
-        "33": 17000000,
-        "34": 17500000,
-        "35": 18000000,
-        "36": 18500000,
-        "37": 19000000,
-        "38": 19500000,
-        "39": 20000000,
-        "40": 20500000,
-        "41": 21000000,
-        "42": 21500000,
-        "43": 22000000,
-        "44": 22500000,
-        "45": 23000000,
-        "46": 23500000,
-        "47": 24000000,
-        "48": 24500000,
-        "49": 25000000,
-        "50": 25500000,
-        "51": 26000000,
-        "52": 26500000,
-        "53": 27000000,
-        "54": 27500000,
-        "55": 28000000,
-        "56": 28500000,
-        "57": 29000000,
-        "58": 29500000,
-        "59": 30000000,
-        "60": 30500000,
-        "61": 31000000,
-        "62": 31500000,
-        "63": 42000000,
-        "64": 42500000,
-        "65": 46000000,
-        "66": 47800000,
-        "67": 53000000,
-        "68": 54000000,
-        "69": 55000000,
-        "70": 56000000,
-        "71": 57000000,
-        "72": 58000000,
-        "73": 59000000,
-        "74": 60000000,
-        "75": 61000000,
-        "76": 62000000,
-        "77": 63000000,
-        "78": 64000000,
-        "79": 65000000,
-        "80": 66000000,
-        "81": 67000000,
-        "82": 68000000,
-        "83": 69000000,
-        "84": 70000000,
-        "85": 71000000,
-        "86": 72000000,
-        "87": 73000000,
-        "88": 74000000,
-        "89": 75000000,
-        "90": 76000000,
-        "91": 77000000,
-        "92": 78000000,
-        "93": 79000000,
-        "94": 80000000,
-        "95": 81000000,
-        "96": 82000000,
-        "97": 83000000,
-        "98": 84000000,
-        "99": 85000000,
-        "100": 86000000,
-    }
+    // Total volume chart
+    let totalVolumeChart = {};
+    data.combinedData.slice(-200).forEach((item) => {
+        totalVolumeChart[dateFormat(item.date)] = item.totalVolume;
+    });
+
+    // Refresh chart data every 5 minutes
+    setupDataRefresh((updatedData) => {
+        const newDaily = {};
+        updatedData.slice(-30).forEach((item) => {
+            newDaily[dateFormat(item.date)] = item.dailyVolume;
+        });
+        dailyVolumeChart = newDaily;
+
+        const newTotal = {};
+        updatedData.slice(-200).forEach((item) => {
+            newTotal[dateFormat(item.date)] = item.totalVolume;
+        });
+        totalVolumeChart = newTotal;
+    }, '/api/combined', import.meta.env.VITE_INTERNAL_API_KEY);
 
     // Gradient bars
     const startColor = '#00E49D';
     const endColor = '#029C2E';
-    const fillArray = chroma.scale([startColor, endColor]).mode('lab').colors(Object.keys(dataTotalVolume).length);
+    const fillArray = chroma.scale([startColor, endColor]).mode('lab').colors(Object.keys(totalVolumeChart).length);
 </script>
 
 <svelte:head>
@@ -230,7 +121,7 @@
         </div>
     </div>
 
-    <div class="grid xl:grid-cols-[1fr_400px] 2xl:grid-cols-[1fr_490px] gap-6 md:gap-8 2xl:gap-[50px] mt-10 lg:mt-19 relative">
+    <div class="grid xl:grid-cols-[1fr_400px] 2xl:grid-cols-[1fr_490px] gap-6 md:gap-8 2xl:gap-[50px] mt-10 lg:mt-17 relative">
         <div class="absolute right-20 z-0 hidden md:block">
             <BlobTwo />
         </div>
@@ -250,7 +141,7 @@
             </div>
 
             <div class="linechart [&_svg]:w-[calc(100%+5px)] [&_svg]:h-[calc(100%-95px)] [&_svg]:-left-[4px] [&_svg]:relative h-full w-full">
-                <LinkedChart data={dataDailyVolume}
+                <LinkedChart data={dailyVolumeChart}
                     grow
                     linked="daily-volume"
                     transition={150}
@@ -330,7 +221,7 @@
                 </div>
 
                 <div class="linechart w-full total absolute bottom-0 left-0 flex items-end [&_svg]:w-[calc(100%+5px)] [&_svg]:h-[calc(100%-80px)] [&_svg]:lg:h-[calc(100%-50px)] [&_svg]:-left-[2px] [&_svg]:relative h-full">
-                    <LinkedChart data={dataTotalVolume}
+                    <LinkedChart data={totalVolumeChart}
                         grow
                         linked="total-volume"
                         transition={150}

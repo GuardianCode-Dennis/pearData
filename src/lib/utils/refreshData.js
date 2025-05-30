@@ -1,9 +1,9 @@
 import { onMount } from 'svelte';
 
-export function setupGeneralDataRefresh(callback, apiKey, intervalMs = 300000) { // 300000ms = 5 minutes
+export function setupDataRefresh(callback, apiUrl, apiKey, intervalMs = 300000) { // 300000ms = 5 minutes
     async function refreshData() {
     try {
-      const res = await fetch('/api/general', {
+      const res = await fetch(apiUrl, {
         headers: {
             'x-api-key': apiKey // zie volgende stap
         }
