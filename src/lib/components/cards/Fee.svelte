@@ -20,8 +20,9 @@
     const todayDate = dateFormat(new Date().toISOString().slice(0, 10));
     let stPear = $cookieData.stPear || 0;
     let stakedPrice = $cookieData.stakedPrice || 0;
-    let totalPearStaked = $generalData.totalPearStaked; // Example value, replace with actual data if available
+    let totalPearStaked = $generalData.totalPearStaked;
     let yourStakingPercentage = (stPear / totalPearStaked) * 100 || 0;
+    let feePercentage = 0.06;
 
     let stakersPercentage = 80;
     let dollarValueToStakers = dailyFee * (stakersPercentage / 100);
@@ -33,7 +34,7 @@
     $: {
         stPear = $cookieData.stPear || 0;
         stakedPrice = $cookieData.stakedPrice || 0;
-        totalPearStaked = $generalData.totalPearStaked; // Example value, replace with actual data if available
+        totalPearStaked = $generalData.totalPearStaked;
         yourStakingPercentage = (stPear / totalPearStaked) * 100 || 0;
 
         stakersPercentage = 80;
@@ -55,10 +56,12 @@
 <Card customClass="flex flex-col justify-between relative z-[1]">
     <div class="flex justify-between items-start">
         <div class="flex flex-col">
-            <span class="text-sm flex">Current estimated fees ({todayDate})</span>
+            <span class="text-sm flex">{todayDate} - Estimated fees ({feePercentage}%)</span>
             <div class="flex flex-col relative">
-                <Number number={dailyFee} type="dollar" size="big" />
-                <span class="text-[10px] italic mt-1">Fees are estimated based on a 0.06% trading fee — actual fees may vary.</span>
+                <div class="flex">
+                    <Number number={dailyFee} type="dollar" size="big" />
+                </div>
+                <span class="text-[10px] italic mt-1">Fees are estimated based on a {feePercentage}% trading fee. Actual fees may vary. Your personal rewards are shown as a range (low to high); actual results may fall anywhere within this range.</span>
             </div>
         </div>
     </div>
@@ -79,11 +82,15 @@
             {/if}
 
             <div class="flex flex-col">
-                <span class="text-sm flex">Your estimated rewards</span>
-                <Number number={yourStakingAmountInDollars} type="dollar" size="normal" />
+                <span class="text-sm flex">Your estimated rewards ({feePercentage / 2}% / {feePercentage}%)</span>
+                <div class="flex gap-x-2 items-center flex-wrap">
+                    <Number number={yourStakingAmountInDollars / 2} type="dollar" size="normal" />
+                    <span class="text-3xl text-white/20"> / </span>
+                    <Number number={yourStakingAmountInDollars} type="dollar" size="normal" />
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-7 mt-8">
+            <div class="grid grid-cols-2 2xl:grid-cols-[160px_1fr] gap-7 mt-8">
 
                 <div class="flex flex-col gap-1">
                     <span class="text-sm flex md:hidden">stPear balance</span>
@@ -102,7 +109,11 @@
                 <div class="flex flex-col gap-1">
                     <span class="text-sm flex">Your APR</span>
                     {#if stakedPrice > 0 && stakedPrice !== 'undefined'}
-                        <Number number={yourAPR} type="percentage" decimals={2} size="small" />
+                        <div class="flex flex-row gap-2 items-center flex-wrap">
+                            <Number number={yourAPR / 2} type="percentage" decimals={0} size="small" />
+                            <span class="text-xl text-white/20"> / </span>
+                            <Number number={yourAPR} type="percentage" decimals={0} size="small" />
+                        </div>
                     {:else}
                         <span class="text-lg italic">-</span>
                     {/if}
