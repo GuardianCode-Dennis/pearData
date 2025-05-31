@@ -15,6 +15,7 @@
 
     // Props
     $: dailyFee = $generalData.dailyFees || 0;
+    $: weeklyFee = $generalData.weeklyFees || 0;
 
     // Variables
     const todayDate = dateFormat(new Date().toISOString().slice(0, 10));
@@ -26,10 +27,12 @@
 
     let stakersPercentage = 80;
     let dollarValueToStakers = dailyFee * (stakersPercentage / 100);
+    let dollarValueToStakersAPR = weeklyFee * (stakersPercentage / 100);
     let yourStakingAmountInDollars = dollarValueToStakers * (yourStakingPercentage / 100);
+    let yourStakingAmountInDollarsAPR = dollarValueToStakersAPR * (yourStakingPercentage / 100);
     
     // APR
-    let yourAPR = stakedPrice > 0 ? ((yourStakingAmountInDollars / stakedPrice) * 365 * 100) : 0;
+    let yourAPR = stakedPrice > 0 ? ((yourStakingAmountInDollarsAPR / stakedPrice) * 365 * 100) : 0;
 
     $: {
         stPear = $cookieData.stPear || 0;
@@ -39,10 +42,12 @@
 
         stakersPercentage = 80;
         dollarValueToStakers = dailyFee * (stakersPercentage / 100);
+        dollarValueToStakersAPR = weeklyFee * (stakersPercentage / 100);
         yourStakingAmountInDollars = dollarValueToStakers * (yourStakingPercentage / 100);
+        yourStakingAmountInDollarsAPR = dollarValueToStakersAPR * (yourStakingPercentage / 100);
         
         // APR
-        yourAPR = stakedPrice > 0 ? ((yourStakingAmountInDollars / stakedPrice) * 365 * 100) : 0;
+        yourAPR = stakedPrice > 0 ? ((yourStakingAmountInDollarsAPR / stakedPrice) * 365 * 100) : 0;
     }
 
     // Token popup
@@ -107,12 +112,12 @@
                     <Number number={yourStakingPercentage} type="percentage" decimals={5} size="small" />
                 </div>
                 <div class="flex flex-col gap-1">
-                    <span class="text-sm flex">Your APR</span>
+                    <span class="text-sm flex">Your APR (7 days)</span>
                     {#if stakedPrice > 0 && stakedPrice !== 'undefined'}
-                        <div class="flex flex-row gap-2 items-center flex-wrap">
-                            <Number number={yourAPR / 2} type="percentage" decimals={0} size="small" />
+                        <div class="flex flex-row gap-x-2 items-center flex-wrap">
+                            <Number number={yourAPR / 2} type="percentage" decimals={2} size="small" />
                             <span class="text-xl text-white/20"> / </span>
-                            <Number number={yourAPR} type="percentage" decimals={0} size="small" />
+                            <Number number={yourAPR} type="percentage" decimals={2} size="small" />
                         </div>
                     {:else}
                         <span class="text-lg italic">-</span>

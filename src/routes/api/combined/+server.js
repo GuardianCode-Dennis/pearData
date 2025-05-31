@@ -8,7 +8,7 @@ export async function GET({request}) {
     }
 
     try {
-        const res = await fetch(API_COMBINED);
+        const res = await fetch(API_COMBINED + '?time=' + new Date().getTime());
         if (!res.ok) return new Response('Failed to fetch', { status: 500 });
         const data = await res.json();
         return new Response(JSON.stringify(data), {

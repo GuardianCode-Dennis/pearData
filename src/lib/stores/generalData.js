@@ -5,6 +5,8 @@ export const generalData = writable({
     dailyVolume: 0,
     dailyUsers: 0,
     dailyFees: 0,
+    totalFees: 0,
+    weeklyFees: 0,
     totalVolume: 0,
     weeklyVolume: 0,
     monthlyVolume: 0,

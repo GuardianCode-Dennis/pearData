@@ -7,7 +7,7 @@ export async function load({ cookies }) {
 	// Get General data from API_GENERAL
 	let generalData = null;
 	try {
-		const res = await fetch(API_GENERAL);
+		const res = await fetch(API_GENERAL + '?time=' + new Date().getTime());
 		if (!res.ok) throw new Error('Failed to fetch');
 		generalData = await res.json();
 	} catch (err) {
@@ -17,7 +17,7 @@ export async function load({ cookies }) {
 	// Fetch combined data
 	let combinedData = null;
 	try {
-		const res = await fetch(API_COMBINED);
+		const res = await fetch(API_COMBINED + '?time=' + new Date().getTime());
 		if (!res.ok) throw new Error('Failed to fetch combined data');
 		combinedData = await res.json();
 	} catch (err) {

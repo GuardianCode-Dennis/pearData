@@ -40,6 +40,8 @@
         dailyVolume: data.generalData.dailyVolume || 0,
         dailyUsers: data.generalData.dailyUsers || 0,
         dailyFees: data.generalData.dailyFees || 0,
+        totalFees: data.generalData.totalFees || 0,
+        weeklyFees: data.generalData.weeklyFees || 0,
         totalVolume: data.generalData.totalVolume || 0,
         weeklyVolume: data.generalData.weeklyVolume || 0,
         monthlyVolume: data.generalData.monthlyVolume || 0,

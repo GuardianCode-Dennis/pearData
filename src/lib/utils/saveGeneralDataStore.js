@@ -10,6 +10,8 @@ export function saveGeneralDataStore(generalData, data) {
         dailyVolume: data.dailyVolume || 0,
         dailyUsers: data.dailyUsers || 0,
         dailyFees: data.dailyFees || 0,
+        totalFees: data.totalFees || 0,
+        weeklyFees: data.weeklyFees || 0,
         totalVolume: data.totalVolume || 0,
         weeklyVolume: data.weeklyVolume || 0,
         monthlyVolume: data.monthlyVolume || 0,
